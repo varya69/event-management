@@ -488,3 +488,36 @@ body {
 .dark-theme .mat-error {
   color: var(--warn-color);
 }
+
+/* Custom Snackbar Styles */
+.custom-snackbar-container {
+  max-width: 400px !important;
+  margin: 0 16px 16px 0 !important;
+}
+
+.custom-snackbar-container .mat-snack-bar-container {
+  padding: 0 !important;
+  min-width: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+  color: inherit !important;
+}
+
+/* Remove default snackbar background */
+.mat-snack-bar-container {
+  box-shadow: none !important;
+  background: transparent !important;
+  color: inherit !important;
+}
+
+/* Override Angular Material styles */
+.mat-snack-bar-container, 
+.mat-snack-bar-container.mat-snackbar-handset {
+  background: transparent !important;
+}
+
+/* Ensure snackbar is above other elements */
+.cdk-overlay-container {
+  z-index: 1060 !important;
+}

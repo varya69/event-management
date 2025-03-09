@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { EventService } from '../../services/event.service';
 import { AuthService } from '../../services/auth.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatDialog } from '@angular/material/dialog';
+import { SnackbarService } from '../../services/snackbar.service';
 import { Event } from '../../models/event.model';
 import { User } from '../../models/user.model';
 
@@ -26,24 +26,24 @@ export class EventDetailComponent implements OnInit {
     private router: Router,
     private eventService: EventService,
     private authService: AuthService,
-    private snackBar: MatSnackBar,
+    private snackbarService: SnackbarService,
     private dialog: MatDialog
   ) {
     this.currentUser = this.authService.getCurrentUser();
-    this.isAdmin = this.authService.isAdmin();
+    this.isAdmin = this.currentUser?.role === 'admin';
   }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       if (params['id']) {
-        this.loadEvent(+params['id']);
+        this.loadEvent(params['id']);
       } else {
         this.router.navigate(['/events']);
       }
     });
   }
 
-  loadEvent(id: number): void {
+  loadEvent(id: string): void {
     this.loading = true;
     this.eventService.getEventById(id).subscribe(
       event => {
@@ -53,9 +53,7 @@ export class EventDetailComponent implements OnInit {
         this.loading = false;
       },
       error => {
-        this.snackBar.open('Error loading event: ' + error.message, 'Close', {
-          duration: 3000
-        });
+        this.snackbarService.error('Error loading event: ' + error.message);
         this.loading = false;
         this.router.navigate(['/events']);
       }
@@ -69,15 +67,11 @@ export class EventDetailComponent implements OnInit {
     this.eventService.registerForEvent(this.event.id).subscribe(
       () => {
         this.isRegistered = true;
-        this.snackBar.open('Successfully registered for event!', 'Close', {
-          duration: 3000
-        });
+        this.snackbarService.success('Successfully registered for event!');
         this.processingRegistration = false;
       },
       error => {
-        this.snackBar.open('Error registering for event: ' + error.message, 'Close', {
-          duration: 3000
-        });
+        this.snackbarService.error('Error registering for event: ' + error.message);
         this.processingRegistration = false;
       }
     );
@@ -91,15 +85,11 @@ export class EventDetailComponent implements OnInit {
       this.eventService.unregisterFromEvent(this.event.id).subscribe(
         () => {
           this.isRegistered = false;
-          this.snackBar.open('Successfully unregistered from event', 'Close', {
-            duration: 3000
-          });
+          this.snackbarService.success('Successfully unregistered from event');
           this.processingRegistration = false;
         },
         error => {
-          this.snackBar.open('Error unregistering from event: ' + error.message, 'Close', {
-            duration: 3000
-          });
+          this.snackbarService.error('Error unregistering from event: ' + error.message);
           this.processingRegistration = false;
         }
       );
@@ -113,15 +103,11 @@ export class EventDetailComponent implements OnInit {
       this.loading = true;
       this.eventService.deleteEvent(this.event.id).subscribe(
         () => {
-          this.snackBar.open('Event deleted successfully!', 'Close', {
-            duration: 3000
-          });
+          this.snackbarService.success('Event deleted successfully!');
           this.router.navigate(['/events']);
         },
         error => {
-          this.snackBar.open('Error deleting event: ' + error.message, 'Close', {
-            duration: 3000
-          });
+          this.snackbarService.error('Error deleting event: ' + error.message);
           this.loading = false;
         }
       );
@@ -129,8 +115,6 @@ export class EventDetailComponent implements OnInit {
   }
 
   handleImageError(event: any): void {
-    // Replace broken image with a reliable placeholder
-    const randomImageNumber = Math.floor(Math.random() * 30) + 1;
-    event.target.src = `https://cdn.dummyjson.com/recipe-images/${randomImageNumber}.webp`;
+    event.target.src = 'assets/images/event-placeholder.jpg';
   }
 } 

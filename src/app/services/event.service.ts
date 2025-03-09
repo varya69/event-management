@@ -17,8 +17,8 @@ export interface PaginatedEvents {
   providedIn: 'root'
 })
 export class EventService {
-  private apiUrl = 'https://your-json-server.onrender.com/events';
-  private usersUrl = 'https://your-json-server.onrender.com/users';
+  private apiUrl = 'https://json-server-backend-en89.onrender.com/events';
+  private usersUrl = 'https://json-server-backend-en89.onrender.com/users';
   private eventsSubject = new BehaviorSubject<Event[]>([]);
   public events$ = this.eventsSubject.asObservable();
 
@@ -76,8 +76,7 @@ export class EventService {
     );
   }
 
-  getEventById(id: number | string): Observable<Event> {
-    // Ensure id is treated as a string for the URL
+  getEventById(id: string): Observable<Event> {
     return this.http.get<Event>(`${this.apiUrl}/${id}`);
   }
 
@@ -131,37 +130,25 @@ export class EventService {
       return throwError(() => new Error('Only administrators can create events'));
     }
     
-    // First get all events to determine the next ID
-    return this.getAllEvents().pipe(
-      switchMap(events => {
-        // Find the highest existing ID
-        const maxId = events.reduce((max, event) => {
-          const eventId = typeof event.id === 'string' ? parseInt(event.id, 10) : (event.id as number);
-          return isNaN(eventId) ? max : Math.max(max, eventId);
-        }, 0);
-        
-        // Create new event with numeric ID
-        const newEvent = {
-          ...event,
-          id: maxId + 1, // Ensure ID is numeric and unique
-          organizer: currentUser.id,
-          attendees: [],
-          createdAt: new Date(),
-          updatedAt: new Date()
-        };
-        
-        // Post the new event with the specified ID
-        return this.http.post<Event>(this.apiUrl, newEvent).pipe(
-          tap(createdEvent => {
-            const currentEvents = this.eventsSubject.value;
-            this.eventsSubject.next([...currentEvents, createdEvent]);
-          })
-        );
+    // Create new event without specifying ID (let JSON Server handle it)
+    const newEvent = {
+      ...event,
+      organizer: currentUser.id,
+      attendees: [],
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    
+    // Post the new event
+    return this.http.post<Event>(this.apiUrl, newEvent).pipe(
+      tap(createdEvent => {
+        const currentEvents = this.eventsSubject.value;
+        this.eventsSubject.next([...currentEvents, createdEvent]);
       })
     );
   }
 
-  updateEvent(id: number | string, event: Partial<Event>): Observable<Event> {
+  updateEvent(id: string, event: Partial<Event>): Observable<Event> {
     const currentUser = this.authService.getCurrentUser();
     
     if (!currentUser || currentUser.role !== 'admin') {
@@ -193,7 +180,7 @@ export class EventService {
     );
   }
 
-  deleteEvent(id: number | string): Observable<void> {
+  deleteEvent(id: string): Observable<void> {
     const currentUser = this.authService.getCurrentUser();
     
     if (!currentUser || currentUser.role !== 'admin') {
@@ -208,7 +195,7 @@ export class EventService {
     );
   }
 
-  registerForEvent(eventId: number | string): Observable<User> {
+  registerForEvent(eventId: string): Observable<User> {
     const currentUser = this.authService.getCurrentUser();
     if (!currentUser) {
       return throwError('User not authenticated');
@@ -222,13 +209,10 @@ export class EventService {
     // Get current registered events or initialize empty array
     const registeredEvents = currentUser.registeredEvents || [];
     
-    // Convert eventId to number for consistent storage
-    const numericEventId = typeof eventId === 'string' ? parseInt(eventId, 10) : eventId;
-    
     // Add event to user's registered events
     const updatedUser = {
       ...currentUser,
-      registeredEvents: [...registeredEvents, numericEventId]
+      registeredEvents: [...registeredEvents, eventId]
     };
     
     // Update user in database
@@ -252,7 +236,7 @@ export class EventService {
     );
   }
 
-  unregisterFromEvent(eventId: number | string): Observable<User> {
+  unregisterFromEvent(eventId: string): Observable<User> {
     const currentUser = this.authService.getCurrentUser();
     if (!currentUser) {
       return throwError('User not authenticated');
@@ -269,16 +253,10 @@ export class EventService {
       });
     }
     
-    // Convert eventId to number for consistent comparison
-    const numericEventId = typeof eventId === 'string' ? parseInt(eventId, 10) : eventId;
-    
-    // Remove event from user's registered events (ensuring numeric comparison)
+    // Remove event from user's registered events
     const updatedUser = {
       ...currentUser,
-      registeredEvents: registeredEvents.filter(id => {
-        const numericId = typeof id === 'string' ? parseInt(id, 10) : id;
-        return numericId !== numericEventId;
-      })
+      registeredEvents: registeredEvents.filter(id => id !== eventId)
     };
     
     // Update user in database
@@ -302,20 +280,13 @@ export class EventService {
     );
   }
 
-  isUserRegistered(eventId: number | string): boolean {
+  isUserRegistered(eventId: string): boolean {
     const currentUser = this.authService.getCurrentUser();
     if (!currentUser || !currentUser.registeredEvents) {
       return false;
     }
     
-    // Convert eventId to number if it's a string
-    const numericEventId = typeof eventId === 'string' ? parseInt(eventId, 10) : eventId;
-    
     // Check if the user is registered for this event
-    return currentUser.registeredEvents.some(id => {
-      // Convert registered event ID to number if it's a string
-      const numericId = typeof id === 'string' ? parseInt(id, 10) : id;
-      return numericId === numericEventId;
-    });
+    return currentUser.registeredEvents.includes(eventId);
   }
 } 

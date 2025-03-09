@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackbarService } from '../../services/snackbar.service';
 
 @Component({
   selector: 'app-register',
@@ -18,7 +18,7 @@ export class RegisterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private authService: AuthService,
-    private snackBar: MatSnackBar
+    private snackbarService: SnackbarService
   ) {
     // Redirect to home if already logged in
     if (this.authService.isAuthenticated()) {
@@ -38,6 +38,11 @@ export class RegisterComponent implements OnInit {
 
   onSubmit(): void {
     if (this.registerForm.invalid) {
+      // Mark all fields as touched to trigger validation messages
+      Object.keys(this.registerForm.controls).forEach(key => {
+        this.registerForm.get(key)?.markAsTouched();
+      });
+      this.snackbarService.warning('Please fill in all required fields correctly.');
       return;
     }
 
@@ -52,15 +57,11 @@ export class RegisterComponent implements OnInit {
     this.authService.register(user)
       .subscribe(
         response => {
-          this.snackBar.open('Registration successful!', 'Close', {
-            duration: 3000
-          });
+          this.snackbarService.success(`Welcome, ${user.name}! Registration successful.`);
           this.router.navigate(['/']);
         },
         error => {
-          this.snackBar.open('Registration failed: ' + error.message, 'Close', {
-            duration: 3000
-          });
+          this.snackbarService.error('Registration failed: ' + error.message);
           this.loading = false;
         }
       );

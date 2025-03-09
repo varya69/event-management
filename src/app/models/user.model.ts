@@ -4,7 +4,7 @@ export interface User {
   password: string;
   name: string;
   role: 'admin' | 'user';
-  registeredEvents?: (number | string)[]; // Array of event IDs the user has registered for
+  registeredEvents?: string[]; // Array of event IDs the user has registered for
 }
 
 export interface AuthResponse {

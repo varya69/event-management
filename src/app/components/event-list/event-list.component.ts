@@ -132,7 +132,7 @@ export class EventListComponent implements OnInit {
         } else {
           // For regular users, show events they registered for
           const registeredEventIds = currentUser.registeredEvents || [];
-          filteredEvents = events.filter(event => registeredEventIds.includes(event.id as any));
+          filteredEvents = events.filter(event => registeredEventIds.includes(event.id));
         }
         
         this.filteredEvents$.next(filteredEvents);
@@ -155,7 +155,7 @@ export class EventListComponent implements OnInit {
     }
   }
 
-  isUserRegistered(eventId: number | string): boolean {
+  isUserRegistered(eventId: string): boolean {
     return this.eventService.isUserRegistered(eventId);
   }
 

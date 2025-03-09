@@ -1,8 +1,15 @@
 # Event Management System
+https://event-manager-f3c3f.web.app/events
 
-A responsive event management application built with Angular and Angular Material, featuring user authentication, event creation, registration, and a modern UI with light/dark theme support.
+A responsive event management application built with Angular and Angular Material, featuring user authentication, event creation, registration, and a modern UI with light/dark theme support. The project uses JSON Server as a backend and is deployed using Firebase.
 
 ![Event Management System](https://source.unsplash.com/random/800x400/?event)
+
+## Live Demo
+
+The application is deployed and available at:
+- **Frontend**: https://event-manager-f3c3f.web.app/events
+- **Backend API**: https://json-server-backend-en89.onrender.com
 
 ## Features
 
@@ -21,7 +28,6 @@ A responsive event management application built with Angular and Angular Materia
 - Node.js (v12 or higher)
 - npm (v6 or higher)
 - Angular CLI (v12 or higher)
-- JSON Server (for mock backend)
 
 ## Installation
 
@@ -36,29 +42,40 @@ cd event-management
 npm install
 ```
 
-3. Install JSON Server globally (if not already installed):
-```bash
-npm install -g json-server
-```
-
 ## Running the Application
 
-1. Start the JSON Server (mock backend):
-```bash
-npm run server
-```
+### Using the Deployed Backend
 
-2. In a separate terminal, start the Angular application:
+The application is configured to use the deployed backend at `https://json-server-backend-en89.onrender.com`. To run the application with this backend:
+
 ```bash
 npm start
 ```
 
-3. Open your browser and navigate to `http://localhost:4200`
+### Using a Local Backend (Development)
 
-Alternatively, you can run both the server and the application concurrently:
+If you want to run the application with a local backend:
+
+1. Install JSON Server globally:
 ```bash
-npm run dev
+npm install -g json-server
 ```
+
+2. Update the API URLs in the following files to use localhost:
+   - `src/app/services/event.service.ts`
+   - `src/app/services/auth.service.ts`
+
+3. Start the JSON Server:
+```bash
+json-server --watch db.json --port 3000
+```
+
+4. In a separate terminal, start the Angular application:
+```bash
+npm start
+```
+
+5. Open your browser and navigate to `http://localhost:4200`
 
 ## Default Users
 
@@ -96,6 +113,8 @@ event-management/
 │   │   │   ├── auth.service.ts # Authentication service
 │   │   │   ├── event.service.ts# Event management service
 │   │   │   └── theme.service.ts# Theme management service
+│   │   ├── utils/              # Utility functions
+│   │   │   └── db-normalizer.ts# Database ID normalizer
 │   │   ├── material.module.ts  # Angular Material module
 │   │   ├── app-routing.module.ts # Application routes
 │   │   ├── app.component.ts    # Root component
@@ -104,6 +123,7 @@ event-management/
 │   ├── environments/           # Environment configurations
 │   └── styles.css              # Global styles
 ├── db.json                     # Mock database for JSON Server
+├── normalize-db.js             # Script to normalize database IDs
 ├── angular.json                # Angular configuration
 ├── package.json                # Project dependencies
 └── README.md                   # Project documentation
@@ -140,16 +160,18 @@ event-management/
 ### 5. Backend Integration
 
 - **RESTful API**: The application communicates with the backend using RESTful principles.
-- **Mock Backend**: JSON Server provides a realistic API experience without a real backend.
+- **JSON Server**: Provides a full REST API with minimal configuration.
 - **Error Handling**: Comprehensive error handling for API requests with user feedback.
+- **ID Normalization**: Ensures consistent numeric IDs for all events and references.
 
 ## Third-Party Libraries
 
-- **Angular (v12.2.0)**: Core framework for building the application
-- **Angular Material (v12.2.13)**: UI component library following Material Design guidelines
-- **RxJS (v6.6.0)**: Reactive programming library for handling asynchronous operations
-- **JSON Server (v1.0.0-beta.3)**: Mock REST API server for development
-- **Concurrently (v9.1.2)**: Run multiple commands concurrently (for development)
+- **Angular**: Core framework for building the application
+- **Angular Material**: UI component library following Material Design guidelines
+- **RxJS**: Reactive programming library for handling asynchronous operations
+- **JSON Server**: REST API server for backend functionality
+- **Firebase**: For hosting the frontend application
+- **Render**: For hosting the JSON Server backend
 
 ## Development Workflow
 
@@ -170,13 +192,19 @@ event-management/
 
 ## Deployment
 
-To build the application for production:
+### Frontend Deployment
+
+The frontend is deployed on Firebase. To deploy updates:
 
 ```bash
 npm run build
+firebase deploy
 ```
 
-The build artifacts will be stored in the `dist/` directory.
+### Backend Deployment
+
+The backend is deployed on Render using JSON Server. The database is hosted at:
+`https://json-server-backend-en89.onrender.com`
 
 ## Contributing
 
@@ -190,4 +218,5 @@ The build artifacts will be stored in the `dist/` directory.
 
 - Angular team for the amazing framework
 - Angular Material team for the UI components
-- JSON Server for the mock backend capabilities
+- JSON Server for the backend capabilities
+- Firebase and Render for hosting services

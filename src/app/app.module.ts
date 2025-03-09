@@ -7,6 +7,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MaterialModule } from './material.module';
+import { SharedModule } from './components/shared/shared.module';
 
 // Components
 import { LoginComponent } from './components/login/login.component';
@@ -33,6 +34,7 @@ import { EventDetailComponent } from './components/event-detail/event-detail.com
     FormsModule,
     ReactiveFormsModule,
     MaterialModule,
+    SharedModule,
     AppRoutingModule
   ],
   providers: [],
