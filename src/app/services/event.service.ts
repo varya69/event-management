@@ -17,8 +17,8 @@ export interface PaginatedEvents {
   providedIn: 'root'
 })
 export class EventService {
-  private apiUrl = 'http://localhost:3000/events';
-  private usersUrl = 'http://localhost:3000/users';
+  private apiUrl = 'https://your-json-server.onrender.com/events';
+  private usersUrl = 'https://your-json-server.onrender.com/users';
   private eventsSubject = new BehaviorSubject<Event[]>([]);
   public events$ = this.eventsSubject.asObservable();
 

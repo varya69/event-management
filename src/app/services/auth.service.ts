@@ -9,7 +9,8 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000'; // JSON Server URL
+  // private apiUrl = 'http://localhost:3000'; // JSON Server URL
+  private apiUrl = 'https://your-json-server.onrender.com'; // JSON Server URL
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
   private tokenKey = 'auth_token';
