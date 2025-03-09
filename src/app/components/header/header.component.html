@@ -1,0 +1,85 @@
+<mat-toolbar color="primary" class="header">
+  <div class="container">
+    <div class="logo-container">
+      <a [routerLink]="['/']" class="logo">
+        <mat-icon>event_available</mat-icon>
+        <span class="app-name">Event Manager</span>
+      </a>
+    </div>
+    
+    <div class="nav-links">
+      <a mat-button [routerLink]="['/events']" routerLinkActive="active-link" matTooltip="Browse all events">
+        <mat-icon>view_list</mat-icon>
+        <span>Events</span>
+      </a>
+      
+      <ng-container *ngIf="isLoggedIn()">
+        <a mat-button [routerLink]="['/my-events']" routerLinkActive="active-link" matTooltip="View your events">
+          <mat-icon>bookmark</mat-icon>
+          <span>My Events</span>
+        </a>
+        
+        <a mat-button [routerLink]="['/events/new']" routerLinkActive="active-link" *ngIf="isAdmin()" matTooltip="Create a new event">
+          <mat-icon>post_add</mat-icon>
+          <span>Create Event</span>
+        </a>
+      </ng-container>
+    </div>
+    
+    <div class="auth-buttons">
+      <!-- Theme Toggle Button -->
+      <button mat-icon-button (click)="toggleTheme()" class="theme-toggle" matTooltip="Toggle Light/Dark Theme">
+        <mat-icon *ngIf="!(isDarkMode$ | async)">nightlight</mat-icon>
+        <mat-icon *ngIf="isDarkMode$ | async">wb_sunny</mat-icon>
+      </button>
+      
+      <ng-container *ngIf="!isLoggedIn()">
+        <a mat-button [routerLink]="['/login']" routerLinkActive="active-link" matTooltip="Log in to your account">
+          <mat-icon>login</mat-icon>
+          <span>Login</span>
+        </a>
+        
+        <a mat-raised-button color="accent" [routerLink]="['/register']" routerLinkActive="active-link" matTooltip="Create a new account">
+          <mat-icon>how_to_reg</mat-icon>
+          <span>Register</span>
+        </a>
+      </ng-container>
+      
+      <ng-container *ngIf="isLoggedIn()">
+        <button mat-button [matMenuTriggerFor]="userMenu" class="user-menu-button" matTooltip="Account options">
+          <div class="user-avatar" *ngIf="isAdmin()">A</div>
+          <div class="user-avatar" *ngIf="!isAdmin()">U</div>
+          <span *ngIf="currentUser$ | async as user">{{ user.name }}</span>
+          <mat-icon>arrow_drop_down</mat-icon>
+        </button>
+        
+        <mat-menu #userMenu="matMenu" class="user-menu">
+          <div class="user-info" *ngIf="currentUser$ | async as user">
+            <div class="user-name">{{ user.name }}</div>
+            <div class="user-email">{{ user.email }}</div>
+            <div class="user-role">{{ user.role === 'admin' ? 'Administrator' : 'User' }}</div>
+          </div>
+          
+          <mat-divider></mat-divider>
+          
+          <button mat-menu-item [routerLink]="['/my-events']">
+            <mat-icon>bookmark</mat-icon>
+            <span>My Events</span>
+          </button>
+          
+          <button mat-menu-item *ngIf="isAdmin()" [routerLink]="['/events/new']">
+            <mat-icon>post_add</mat-icon>
+            <span>Create Event</span>
+          </button>
+          
+          <mat-divider></mat-divider>
+          
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Logout</span>
+          </button>
+        </mat-menu>
+      </ng-container>
+    </div>
+  </div>
+</mat-toolbar> 

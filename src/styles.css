@@ -1,1 +1,490 @@
 /* You can add global styles to this file, and also import other style files */
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary-color: #3f51b5;
+  --accent-color: #ff4081;
+  --warn-color: #f44336;
+  --background-color: #f8f9fa;
+  --card-background: #ffffff;
+  --text-color: rgba(0, 0, 0, 0.87);
+  --text-secondary-color: rgba(0, 0, 0, 0.6);
+  --border-color: rgba(0, 0, 0, 0.12);
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --hover-color: rgba(0, 0, 0, 0.04);
+  
+  --transition-duration: 0.3s;
+}
+
+.dark-theme {
+  --primary-color: #7986cb;
+  --accent-color: #ff80ab;
+  --warn-color: #ef5350;
+  --background-color: #121212;
+  --card-background: #1e1e1e;
+  --text-color: rgba(255, 255, 255, 0.87);
+  --text-secondary-color: rgba(255, 255, 255, 0.6);
+  --border-color: rgba(255, 255, 255, 0.12);
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --hover-color: rgba(255, 255, 255, 0.08);
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Poppins', Roboto, "Helvetica Neue", sans-serif;
+  transition: background-color var(--transition-duration) ease;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+/* Material overrides */
+.mat-card {
+  border-radius: 12px !important;
+  box-shadow: 0 4px 16px var(--shadow-color) !important;
+  transition: box-shadow 0.3s ease, background-color var(--transition-duration) ease;
+  background-color: var(--card-background) !important;
+  color: var(--text-color) !important;
+}
+
+.mat-card:hover {
+  box-shadow: 0 8px 24px var(--shadow-color) !important;
+}
+
+.mat-form-field {
+  width: 100%;
+}
+
+/* Fix for dollar prefix alignment */
+.mat-form-field-prefix {
+  top: 0 !important;
+  position: relative !important;
+  margin-right: 8px !important;
+}
+
+/* Consistent chip styling */
+.mat-chip.mat-standard-chip {
+  border-radius: 16px !important;
+  min-height: 28px !important;
+  padding: 4px 12px !important;
+}
+
+/* Fix for mat-chip-list to ensure proper rendering */
+.mat-chip-list-wrapper {
+  margin: 0 !important;
+}
+
+.mat-chip-list-wrapper .mat-standard-chip {
+  margin: 0 !important;
+}
+
+/* Ensure primary chips have consistent styling */
+.mat-chip.mat-standard-chip.mat-primary {
+  border-radius: 16px !important;
+}
+
+.mat-button, 
+.mat-raised-button, 
+.mat-flat-button, 
+.mat-stroked-button {
+  font-weight: 500 !important;
+  border-radius: 8px !important;
+}
+
+.mat-button-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mat-icon {
+  vertical-align: middle;
+}
+
+.mat-menu-panel {
+  border-radius: 12px !important;
+  overflow: hidden;
+  background-color: var(--card-background) !important;
+  color: var(--text-color) !important;
+}
+
+.mat-menu-item {
+  font-family: 'Poppins', sans-serif;
+  color: var(--text-color) !important;
+}
+
+.mat-menu-item:hover {
+  background-color: var(--hover-color) !important;
+}
+
+.mat-chip {
+  font-weight: 500 !important;
+}
+
+.mat-toolbar {
+  font-family: 'Poppins', sans-serif !important;
+  transition: background-color var(--transition-duration) ease;
+}
+
+/* Dark theme overrides for Material components */
+.dark-theme .mat-toolbar.mat-primary {
+  background-color: #1a1a1a !important;
+}
+
+.dark-theme .mat-form-field-label {
+  color: var(--text-secondary-color) !important;
+}
+
+.dark-theme .mat-form-field-underline {
+  background-color: var(--border-color) !important;
+}
+
+.dark-theme .mat-form-field-ripple {
+  background-color: var(--primary-color) !important;
+}
+
+.dark-theme .mat-input-element {
+  color: var(--text-color) !important;
+}
+
+.dark-theme .mat-form-field-appearance-outline .mat-form-field-outline {
+  color: var(--border-color) !important;
+}
+
+.dark-theme .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+  color: var(--primary-color) !important;
+}
+
+.dark-theme .mat-form-field-appearance-outline .mat-form-field-outline-thick {
+  color: var(--primary-color) !important;
+}
+
+.dark-theme .mat-card-subtitle {
+  color: var(--text-secondary-color) !important;
+}
+
+.dark-theme .mat-icon {
+  color: var(--text-color) !important;
+}
+
+/* Fix for date picker icon in dark mode */
+.dark-theme .mat-datepicker-toggle .mat-icon-button {
+  color: var(--text-color) !important;
+}
+
+.dark-theme .mat-datepicker-toggle-default-icon {
+  fill: var(--text-color) !important;
+}
+
+/* Fix for hint text in dark mode */
+.dark-theme .mat-hint {
+  color: var(--text-secondary-color) !important;
+  opacity: 0.8;
+}
+
+.dark-theme .mat-button-focus-overlay {
+  background-color: var(--primary-color) !important;
+}
+
+.dark-theme .mat-button.mat-primary .mat-button-focus-overlay,
+.dark-theme .mat-icon-button.mat-primary .mat-button-focus-overlay,
+.dark-theme .mat-stroked-button.mat-primary .mat-button-focus-overlay {
+  background-color: var(--primary-color) !important;
+}
+
+.dark-theme .mat-button.mat-primary,
+.dark-theme .mat-icon-button.mat-primary,
+.dark-theme .mat-stroked-button.mat-primary {
+  color: var(--primary-color) !important;
+}
+
+.dark-theme .mat-raised-button.mat-primary,
+.dark-theme .mat-flat-button.mat-primary,
+.dark-theme .mat-fab.mat-primary,
+.dark-theme .mat-mini-fab.mat-primary {
+  background-color: var(--primary-color) !important;
+  color: white !important;
+}
+
+.dark-theme .mat-raised-button.mat-accent,
+.dark-theme .mat-flat-button.mat-accent,
+.dark-theme .mat-fab.mat-accent,
+.dark-theme .mat-mini-fab.mat-accent {
+  background-color: var(--accent-color) !important;
+  color: white !important;
+}
+
+.dark-theme .mat-raised-button.mat-warn,
+.dark-theme .mat-flat-button.mat-warn,
+.dark-theme .mat-fab.mat-warn,
+.dark-theme .mat-mini-fab.mat-warn {
+  background-color: var(--warn-color) !important;
+  color: white !important;
+}
+
+.dark-theme .mat-button.mat-accent,
+.dark-theme .mat-icon-button.mat-accent,
+.dark-theme .mat-stroked-button.mat-accent {
+  color: var(--accent-color) !important;
+}
+
+.dark-theme .mat-button.mat-warn,
+.dark-theme .mat-icon-button.mat-warn,
+.dark-theme .mat-stroked-button.mat-warn {
+  color: var(--warn-color) !important;
+}
+
+.dark-theme .mat-checkbox-frame {
+  border-color: var(--border-color) !important;
+}
+
+.dark-theme .mat-checkbox-checkmark-path {
+  stroke: var(--card-background) !important;
+}
+
+.dark-theme .mat-checkbox-checked.mat-primary .mat-checkbox-background {
+  background-color: var(--primary-color) !important;
+}
+
+.dark-theme .mat-checkbox-label {
+  color: var(--text-color) !important;
+}
+
+.dark-theme .mat-select-value {
+  color: var(--text-color) !important;
+}
+
+.dark-theme .mat-select-arrow {
+  color: var(--text-secondary-color) !important;
+}
+
+.dark-theme .mat-select-panel {
+  background-color: var(--card-background) !important;
+}
+
+.dark-theme .mat-option {
+  color: var(--text-color) !important;
+}
+
+.dark-theme .mat-option:hover:not(.mat-option-disabled),
+.dark-theme .mat-option:focus:not(.mat-option-disabled) {
+  background-color: var(--hover-color) !important;
+}
+
+.dark-theme .mat-option.mat-selected:not(.mat-option-multiple):not(.mat-option-disabled) {
+  background-color: var(--hover-color) !important;
+  color: var(--primary-color) !important;
+}
+
+/* Utility classes */
+.text-center {
+  text-align: center;
+}
+
+.mt-1 {
+  margin-top: 8px;
+}
+
+.mt-2 {
+  margin-top: 16px;
+}
+
+.mt-3 {
+  margin-top: 24px;
+}
+
+.mb-1 {
+  margin-bottom: 8px;
+}
+
+.mb-2 {
+  margin-bottom: 16px;
+}
+
+.mb-3 {
+  margin-bottom: 24px;
+}
+
+.p-1 {
+  padding: 8px;
+}
+
+.p-2 {
+  padding: 16px;
+}
+
+.p-3 {
+  padding: 24px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Event date display in dark mode */
+.dark-theme .event-date {
+  background-color: rgba(50, 50, 50, 0.95) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+}
+
+.dark-theme .date-month {
+  color: var(--primary-color) !important;
+}
+
+.dark-theme .date-day {
+  color: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* Responsive utilities */
+@media (max-width: 768px) {
+  .hide-sm {
+    display: none !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .hide-xs {
+    display: none !important;
+  }
+}
+
+/* Add these styles to improve the appearance of chips in dark mode */
+.dark-theme .mat-chip.mat-standard-chip {
+  background-color: rgba(50, 50, 50, 0.85) !important;
+  color: var(--text-color) !important;
+}
+
+.dark-theme .mat-chip.mat-standard-chip.mat-primary {
+  background-color: var(--primary-color) !important;
+  color: white !important;
+}
+
+.dark-theme .mat-chip.mat-standard-chip.mat-accent {
+  background-color: var(--accent-color) !important;
+  color: white !important;
+}
+
+.dark-theme .mat-chip.mat-standard-chip.mat-warn {
+  background-color: var(--warn-color) !important;
+  color: white !important;
+}
+
+/* Improve menu item styling in dark mode */
+.dark-theme .mat-menu-content {
+  background-color: var(--card-background) !important;
+}
+
+.dark-theme .mat-menu-item .mat-icon {
+  color: var(--text-secondary-color) !important;
+}
+
+.dark-theme .mat-menu-item:hover .mat-icon {
+  color: var(--text-color) !important;
+}
+
+/* Event date display in dark mode */
+.dark-theme .event-date {
+  background-color: rgba(50, 50, 50, 0.95) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Add these styles to fix placeholder colors in dark mode */
+.dark-theme .mat-form-field-label {
+  color: var(--text-secondary-color) !important;
+}
+
+.dark-theme input::placeholder,
+.dark-theme textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5) !important;
+  opacity: 1 !important;
+}
+
+.dark-theme .mat-input-element {
+  color: var(--text-color) !important;
+}
+
+.dark-theme .mat-form-field-appearance-outline .mat-form-field-outline {
+  color: var(--border-color) !important;
+}
+
+.dark-theme .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+  color: var(--primary-color) !important;
+}
+
+.dark-theme .mat-form-field-appearance-outline .mat-form-field-outline-thick {
+  color: var(--primary-color) !important;
+}
+
+/* Form field styles for dark mode */
+.dark-theme .mat-form-field-appearance-outline .mat-form-field-flex {
+  background-color: rgba(30, 30, 30, 0.3);
+  border-radius: 4px;
+}
+
+.dark-theme .mat-form-field-appearance-outline.mat-focused .mat-form-field-flex {
+  background-color: rgba(30, 30, 30, 0.5);
+}
+
+.dark-theme .mat-form-field-appearance-outline .mat-select-arrow {
+  color: var(--text-secondary-color);
+}
+
+.dark-theme .mat-form-field-appearance-outline .mat-select-value {
+  color: var(--text-color);
+}
+
+.dark-theme .mat-form-field-appearance-outline .mat-select-placeholder {
+  color: var(--text-secondary-color);
+}
+
+.dark-theme .mat-form-field-appearance-outline .mat-form-field-infix {
+  padding: 0.5em 0;
+}
+
+.dark-theme .mat-form-field-appearance-outline .mat-form-field-wrapper {
+  margin: 0;
+}
+
+.dark-theme .mat-form-field-appearance-outline .mat-form-field-subscript-wrapper {
+  padding: 0 1em;
+}
+
+.dark-theme .mat-form-field-appearance-outline .mat-form-field-ripple {
+  background-color: var(--primary-color);
+}
+
+.dark-theme .mat-form-field-appearance-outline.mat-focused .mat-form-field-label {
+  color: var(--primary-color);
+}
+
+.dark-theme .mat-form-field-appearance-outline.mat-form-field-invalid .mat-form-field-label {
+  color: var(--warn-color);
+}
+
+.dark-theme .mat-form-field-appearance-outline.mat-form-field-invalid .mat-form-field-outline-thick {
+  color: var(--warn-color);
+}
+
+.dark-theme .mat-error {
+  color: var(--warn-color);
+}

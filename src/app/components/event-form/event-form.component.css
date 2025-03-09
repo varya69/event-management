@@ -1,0 +1,115 @@
+.event-form-container {
+  max-width: 800px;
+  margin: 80px auto 24px;
+  padding: 0 16px;
+}
+
+.event-form-card {
+  padding: 24px;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+.form-field {
+  margin-bottom: 16px;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -8px;
+}
+
+.half-width {
+  flex: 0 0 calc(50% - 16px);
+  margin: 0 8px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+.form-actions button {
+  margin-left: 8px;
+}
+
+.spinner {
+  display: inline-block;
+  margin-right: 8px;
+}
+
+/* Fix for dollar prefix alignment */
+.mat-form-field-prefix {
+  top: 0 !important;
+  position: relative !important;
+  color: var(--text-secondary-color) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .event-form-container {
+    margin-top: 64px;
+  }
+  
+  .half-width {
+    flex: 0 0 calc(100% - 16px);
+  }
+}
+
+/* Dark mode specific styles */
+:host-context(.dark-theme) .mat-form-field-label {
+  color: var(--text-secondary-color);
+}
+
+:host-context(.dark-theme) .mat-form-field-underline {
+  background-color: var(--border-color);
+}
+
+:host-context(.dark-theme) .mat-input-element {
+  color: var(--text-color);
+}
+
+:host-context(.dark-theme) .mat-form-field-appearance-outline .mat-form-field-outline {
+  color: var(--border-color);
+}
+
+:host-context(.dark-theme) .mat-icon {
+  color: var(--text-secondary-color);
+}
+
+/* Fix for date picker icon in dark mode */
+:host-context(.dark-theme) .mat-datepicker-toggle .mat-icon-button {
+  color: var(--text-color) !important;
+}
+
+:host-context(.dark-theme) .mat-datepicker-toggle-default-icon {
+  fill: var(--text-color) !important;
+}
+
+/* Fix for hint text in dark mode */
+:host-context(.dark-theme) .mat-hint {
+  color: var(--text-secondary-color) !important;
+  opacity: 0.8;
+}
+
+:host-context(.dark-theme) input::placeholder,
+:host-context(.dark-theme) textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+  opacity: 1;
+}
+
+.suggest-image-btn {
+  margin-top: 8px;
+  margin-bottom: 16px;
+} 

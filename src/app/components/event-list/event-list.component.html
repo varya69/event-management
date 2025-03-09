@@ -1,0 +1,148 @@
+<div class="event-list-container">
+  <div class="page-header">
+    <h1 class="page-title">{{ pageTitle }}</h1>
+    
+    <button 
+      mat-raised-button 
+      color="primary" 
+      [routerLink]="['/events/new']" 
+      *ngIf="isAdmin">
+      <mat-icon>add_circle</mat-icon>
+      Create New Event
+    </button>
+  </div>
+  
+
+  <div class="search-container">
+    <mat-form-field appearance="outline" class="search-field">
+      <!-- <mat-label>Search Events</mat-label> -->
+      <input matInput [formControl]="searchControl" placeholder="Search by title, location, or category">
+      <button mat-icon-button matSuffix *ngIf="searchControl.value" (click)="clearSearch()" aria-label="Clear">
+        <mat-icon>cancel</mat-icon>
+      </button>
+      <mat-icon matSuffix *ngIf="!searchControl.value">travel_explore</mat-icon>
+    </mat-form-field>
+  </div>
+  
+  <div class="loading-container" *ngIf="loading">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+  
+  <div class="events-grid" *ngIf="!loading">
+    <ng-container *ngIf="(events$ | async)?.length; else noEvents">
+      <mat-card class="event-card" *ngFor="let event of events$ | async">
+        <div class="event-image" *ngIf="event.imageUrl">
+          <img [src]="event.imageUrl" [alt]="event.title" (error)="handleImageError($event)">
+          
+          <div class="event-date" [ngClass]="{'dark-date': isDarkMode$ | async}">
+            <div class="date-month">{{ event.date | date:'MMM' }}</div>
+            <div class="date-day">{{ event.date | date:'d' }}</div>
+          </div>
+          
+          <div class="event-category">
+            <mat-chip-list>
+              <mat-chip color="primary" [ngClass]="{'dark-chip': isDarkMode$ | async}">{{ event.category }}</mat-chip>
+            </mat-chip-list>
+          </div>
+          
+          <div class="registration-badge" *ngIf="isUserRegistered(event.id) && !isAdmin">
+            <mat-icon>verified</mat-icon>
+            <span>Registered</span>
+          </div>
+        </div>
+        
+        <mat-card-content>
+          <h2 class="event-title">{{ event.title }}</h2>
+          
+          <div class="event-details">
+            <div class="event-detail">
+              <mat-icon>access_time</mat-icon>
+              <span>{{ event.time }}</span>
+            </div>
+            
+            <div class="event-detail">
+              <mat-icon>place</mat-icon>
+              <span>{{ event.location }}</span>
+            </div>
+            
+            <div class="event-detail" *ngIf="event.price">
+              <mat-icon>payments</mat-icon>
+              <span>{{ event.price | currency }}</span>
+            </div>
+            
+            <div class="event-detail" *ngIf="event.attendees && event.attendees.length">
+              <mat-icon>groups</mat-icon>
+              <span>{{ event.attendees.length }} attending</span>
+            </div>
+          </div>
+          
+          <p class="event-description">{{ event.description | slice:0:120 }}{{ event.description.length > 120 ? '...' : '' }}</p>
+        </mat-card-content>
+        
+        <mat-card-actions>
+          <a mat-button color="primary" [routerLink]="['/events', event.id]">
+            <mat-icon>visibility</mat-icon>
+            <span>View Details</span>
+          </a>
+          
+          <a mat-button color="accent" [routerLink]="['/events', event.id, 'edit']" *ngIf="isAdmin">
+            <mat-icon>edit_note</mat-icon>
+            <span>Edit</span>
+          </a>
+        </mat-card-actions>
+      </mat-card>
+    </ng-container>
+    
+    <ng-template #noEvents>
+      <div class="no-events">
+        <mat-icon class="no-events-icon">event_note</mat-icon>
+        <h2>No events found</h2>
+        <p *ngIf="!isMyEventsView && isSearching">No events match your search criteria. Try different keywords.</p>
+        <p *ngIf="!isMyEventsView && !isSearching">No events are currently available. Check back later for new events.</p>
+        <p *ngIf="isMyEventsView && !isAdmin">You haven't registered for any events yet.</p>
+        <p *ngIf="isMyEventsView && isAdmin">You haven't created any events yet.</p>
+        
+        <div class="no-events-actions">
+          <button mat-raised-button color="primary" (click)="clearSearch()" *ngIf="isSearching">
+            <mat-icon>backspace</mat-icon>
+            Clear Search
+          </button>
+          
+          <button mat-raised-button color="primary" [routerLink]="['/events']" *ngIf="isMyEventsView">
+            <mat-icon>view_list</mat-icon>
+            Browse All Events
+          </button>
+          
+          <button mat-raised-button color="primary" [routerLink]="['/events/new']" *ngIf="isAdmin">
+            <mat-icon>post_add</mat-icon>
+            Create New Event
+          </button>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+  
+  <!-- Pagination -->
+  <div class="pagination-container" *ngIf="!isMyEventsView && !loading && !isSearching && (events$ | async)?.length">
+    <mat-paginator
+      [length]="totalEvents"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="pageSizeOptions"
+      [pageIndex]="currentPage - 1"
+      (page)="onPageChange($event)"
+      showFirstLastButtons
+      aria-label="Select page">
+    </mat-paginator>
+  </div>
+  
+  <!-- Search results info -->
+  <div class="search-info mb-3" *ngIf="isSearching && !loading">
+    <p>
+      <span *ngIf="(events$ | async)?.length">Showing {{ (events$ | async)?.length }} search results</span>
+      <button mat-button color="primary" (click)="clearSearch()">
+        <mat-icon>keyboard_return</mat-icon>
+        Back to All Events
+      </button>
+    </p>
+  </div>
+</div> 

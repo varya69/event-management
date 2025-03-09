@@ -1,0 +1,13 @@
+.main-content {
+  padding-top: 64px; /* Height of the header */
+  min-height: calc(100vh - 64px);
+  background-color: var(--background-color);
+  transition: background-color var(--transition-duration) ease;
+}
+
+@media (max-width: 599px) {
+  .main-content {
+    padding-top: 56px; /* Height of the header on mobile */
+    min-height: calc(100vh - 56px);
+  }
+}

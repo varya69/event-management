@@ -1,0 +1,87 @@
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: var(--background-color);
+}
+
+.register-card {
+  max-width: 400px;
+  width: 100%;
+  padding: 20px;
+  box-shadow: 0 4px 12px var(--shadow-color);
+  background-color: var(--card-background);
+  border-radius: 12px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.form-field {
+  margin-bottom: 16px;
+}
+
+.form-actions {
+  margin-top: 24px;
+}
+
+.spinner {
+  display: inline-block;
+  margin-right: 8px;
+}
+
+.login-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 16px;
+  color: var(--text-secondary-color);
+}
+
+.login-button {
+  margin-left: 8px;
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.login-button:hover {
+  text-decoration: underline;
+}
+
+/* Dark mode specific styles */
+:host-context(.dark-theme) .mat-form-field-label {
+  color: var(--text-secondary-color);
+}
+
+:host-context(.dark-theme) .mat-form-field-underline {
+  background-color: var(--border-color);
+}
+
+:host-context(.dark-theme) .mat-input-element {
+  color: var(--text-color);
+}
+
+:host-context(.dark-theme) .mat-form-field-appearance-outline .mat-form-field-outline {
+  color: var(--border-color);
+}
+
+:host-context(.dark-theme) .mat-icon {
+  color: var(--text-secondary-color);
+}
+
+:host-context(.dark-theme) input::placeholder,
+:host-context(.dark-theme) textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+  opacity: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 599px) {
+  .register-card {
+    max-width: 90%;
+    margin: 0 16px;
+  }
+} 

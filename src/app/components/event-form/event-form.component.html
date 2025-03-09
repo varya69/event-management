@@ -1,0 +1,119 @@
+<div class="event-form-container">
+  <mat-card class="event-form-card">
+    <mat-card-header>
+      <mat-card-title>{{ isEditMode ? 'Edit Event' : 'Create New Event' }}</mat-card-title>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <div class="loading-container" *ngIf="loading">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+      
+      <form [formGroup]="eventForm" (ngSubmit)="onSubmit()" *ngIf="!loading">
+        <!-- Title -->
+        <div class="form-field">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Event Title</mat-label>
+            <input matInput formControlName="title" placeholder="Enter event title" required>
+            <mat-error *ngIf="f.title.errors?.required">Title is required</mat-error>
+          </mat-form-field>
+        </div>
+        
+        <!-- Description -->
+        <div class="form-field">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description" placeholder="Enter event description" rows="4" required></textarea>
+            <mat-error *ngIf="f.description.errors?.required">Description is required</mat-error>
+            <mat-error *ngIf="f.description.errors?.minlength">Description must be at least 20 characters</mat-error>
+          </mat-form-field>
+        </div>
+        
+        <!-- Date and Time -->
+        <div class="form-row">
+          <div class="form-field half-width">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Date</mat-label>
+              <input matInput [matDatepicker]="picker" formControlName="date" required>
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              <mat-error *ngIf="f.date.errors?.required">Date is required</mat-error>
+            </mat-form-field>
+          </div>
+          
+          <div class="form-field half-width">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Time</mat-label>
+              <input matInput formControlName="time" placeholder="e.g., 7:00 PM" required>
+              <mat-error *ngIf="f.time.errors?.required">Time is required</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        
+        <!-- Location -->
+        <div class="form-field">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Location</mat-label>
+            <input matInput formControlName="location" placeholder="Enter event location" required>
+            <mat-icon matSuffix>place</mat-icon>
+            <mat-error *ngIf="f.location.errors?.required">Location is required</mat-error>
+          </mat-form-field>
+        </div>
+        
+        <!-- Category -->
+        <div class="form-field">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Category</mat-label>
+            <mat-select formControlName="category" required>
+              <mat-option *ngFor="let category of categories" [value]="category">
+                {{ category }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="f.category.errors?.required">Category is required</mat-error>
+          </mat-form-field>
+        </div>
+        
+        <!-- Image URL -->
+        <div class="form-field">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Image URL (optional)</mat-label>
+            <input matInput formControlName="imageUrl" placeholder="Enter image URL (1200x800 recommended)">
+            <mat-hint>For best results, use high-resolution images (1200x800 or larger)</mat-hint>
+            <mat-icon matSuffix>image</mat-icon>
+          </mat-form-field>
+          <button mat-stroked-button color="primary" type="button" class="suggest-image-btn" (click)="suggestImageUrl(f.category.value)" [disabled]="!f.category.value">
+            <mat-icon>auto_awesome</mat-icon> Suggest Image
+          </button>
+        </div>
+        
+        <!-- Max Attendees and Price -->
+        <div class="form-row">
+          <div class="form-field half-width">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Max Attendees (optional)</mat-label>
+              <input matInput type="number" formControlName="maxAttendees" placeholder="Enter maximum attendees">
+              <mat-icon matSuffix>diversity_3</mat-icon>
+            </mat-form-field>
+          </div>
+          
+          <div class="form-field half-width">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Price (optional)</mat-label>
+              <input matInput type="number" formControlName="price" placeholder="Enter price">
+              <span matPrefix>$&nbsp;</span>
+              <mat-icon matSuffix>payments</mat-icon>
+            </mat-form-field>
+          </div>
+        </div>
+        
+        <div class="form-actions">
+          <button mat-button type="button" [routerLink]="['/events']">Cancel</button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="eventForm.invalid || loading">
+            <mat-spinner diameter="20" *ngIf="loading" class="spinner"></mat-spinner>
+            <span *ngIf="!loading">{{ isEditMode ? 'Update Event' : 'Create Event' }}</span>
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div> 

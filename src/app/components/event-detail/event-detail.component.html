@@ -1,0 +1,125 @@
+<div class="event-detail-container">
+  <div class="loading-container" *ngIf="loading">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+  
+  <div class="event-detail" *ngIf="!loading && event">
+    <div class="event-header">
+      <button mat-icon-button [routerLink]="['/events']" class="back-button" matTooltip="Back to Events">
+        <mat-icon>keyboard_backspace</mat-icon>
+      </button>
+      
+      <h1 class="event-title">{{ event?.title }}</h1>
+      
+      <div class="event-actions" *ngIf="isAdmin">
+        <button mat-icon-button [routerLink]="['/events', event?.id, 'edit']" matTooltip="Edit Event" color="primary">
+          <mat-icon>edit_note</mat-icon>
+        </button>
+        
+        <button mat-icon-button (click)="deleteEvent()" matTooltip="Delete Event" color="warn">
+          <mat-icon>delete_forever</mat-icon>
+        </button>
+      </div>
+    </div>
+    
+    <mat-card class="event-card">
+      <div class="event-image" *ngIf="event?.imageUrl">
+        <img [src]="event?.imageUrl" [alt]="event?.title" (error)="handleImageError($event)">
+      </div>
+      
+      <div class="event-content">
+        <div class="event-status-bar">
+          <div class="event-category">
+            <mat-chip-list>
+              <mat-chip color="primary" selected>{{ event?.category }}</mat-chip>
+            </mat-chip-list>
+          </div>
+          
+          <div class="event-attendees" *ngIf="event?.attendees && event?.attendees?.length">
+            <mat-icon>groups</mat-icon>
+            <span>{{ event?.attendees?.length }} {{ event?.attendees?.length === 1 ? 'person' : 'people' }} attending</span>
+          </div>
+        </div>
+        
+        <div class="event-meta">
+          <div class="meta-item">
+            <mat-icon>calendar_month</mat-icon>
+            <span>{{ event?.date | date:'fullDate' }}</span>
+          </div>
+          
+          <div class="meta-item">
+            <mat-icon>access_time</mat-icon>
+            <span>{{ event?.time }}</span>
+          </div>
+          
+          <div class="meta-item">
+            <mat-icon>place</mat-icon>
+            <span>{{ event?.location }}</span>
+          </div>
+          
+          <div class="meta-item" *ngIf="event?.price">
+            <mat-icon>payments</mat-icon>
+            <span>{{ event?.price | currency }}</span>
+          </div>
+          
+          <div class="meta-item" *ngIf="event?.maxAttendees">
+            <mat-icon>diversity_3</mat-icon>
+            <span>Max Attendees: {{ event?.maxAttendees }}</span>
+          </div>
+        </div>
+        
+        <div class="event-description">
+          <h2>Description</h2>
+          <p>{{ event?.description }}</p>
+        </div>
+        
+        <div class="event-footer">
+          <!-- Show registration button for non-admin users who are not registered -->
+          <button 
+            mat-raised-button 
+            color="primary" 
+            *ngIf="!isAdmin && !isRegistered && currentUser"
+            (click)="registerForEvent()"
+            [disabled]="processingRegistration">
+            <mat-spinner diameter="20" *ngIf="processingRegistration" class="spinner"></mat-spinner>
+            <mat-icon *ngIf="!processingRegistration">app_registration</mat-icon>
+            <span *ngIf="!processingRegistration">Register for Event</span>
+          </button>
+          
+          <!-- Show unregister button for registered users -->
+          <button 
+            mat-raised-button 
+            color="warn" 
+            *ngIf="!isAdmin && isRegistered"
+            (click)="unregisterFromEvent()"
+            [disabled]="processingRegistration">
+            <mat-spinner diameter="20" *ngIf="processingRegistration" class="spinner"></mat-spinner>
+            <mat-icon *ngIf="!processingRegistration">event_busy</mat-icon>
+            <span *ngIf="!processingRegistration">Cancel Registration</span>
+          </button>
+          
+          <!-- Show login prompt for non-logged in users -->
+          <div class="login-prompt" *ngIf="!currentUser">
+            <p>Please <a [routerLink]="['/login']">login</a> to register for this event?.</p>
+          </div>
+          
+          <!-- Show registration status for registered users -->
+          <div class="registration-status" *ngIf="isRegistered">
+            <mat-icon color="primary">verified</mat-icon>
+            <span>You are registered for this event</span>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+  
+  <div class="not-found" *ngIf="!loading && !event">
+    <mat-icon class="not-found-icon">event_note</mat-icon>
+    <h2>Event Not Found</h2>
+    <p>The event you're looking for doesn't exist or has been removed.</p>
+    <button mat-raised-button color="primary" [routerLink]="['/events']">
+      <mat-icon>view_list</mat-icon>
+      View All Events
+    </button>
+  </div>
+</div> 
